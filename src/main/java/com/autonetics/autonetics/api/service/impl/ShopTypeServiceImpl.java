@@ -1,5 +1,6 @@
 package com.autonetics.autonetics.api.service.impl;
 
+import com.autonetics.autonetics.api.exception.NullEntityReferenceException;
 import com.autonetics.autonetics.api.model.entity.ShopType;
 import com.autonetics.autonetics.api.repository.ShopTypeRepository;
 import com.autonetics.autonetics.api.service.ShopTypeService;
@@ -25,8 +26,7 @@ public class ShopTypeServiceImpl implements ShopTypeService {
         if (shopType != null) {
             return shopTypeRepository.save(shopType);
         }
-//        throw new NullEntityReferenceException("ShopType cannot be 'null'");
-        return null;
+        throw new NullEntityReferenceException("ShopType cannot be 'null'");
     }
 
     @Override
@@ -35,8 +35,7 @@ public class ShopTypeServiceImpl implements ShopTypeService {
             readById(shopType.getId());
             return shopTypeRepository.save(shopType);
         }
-//        throw new NullEntityReferenceException("ShopType cannot be 'null'");
-        return null;
+        throw new NullEntityReferenceException("ShopType cannot be 'null'");
     }
 
     @Override

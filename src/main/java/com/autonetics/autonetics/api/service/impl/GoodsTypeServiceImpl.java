@@ -1,5 +1,6 @@
 package com.autonetics.autonetics.api.service.impl;
 
+import com.autonetics.autonetics.api.exception.NullEntityReferenceException;
 import com.autonetics.autonetics.api.model.entity.GoodsType;
 import com.autonetics.autonetics.api.repository.GoodsTypeRepository;
 import com.autonetics.autonetics.api.service.GoodsTypeService;
