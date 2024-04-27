@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/streets")
+@RequestMapping("/api/location/streets")
 public class StreetController {
     private StreetService streetService;
     private StreetMapper streetMapper;
