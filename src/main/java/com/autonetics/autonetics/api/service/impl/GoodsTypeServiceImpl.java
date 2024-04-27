@@ -20,9 +20,7 @@ public class GoodsTypeServiceImpl implements GoodsTypeService {
         if (goodsType != null) {
             return goodsTypeRepository.save(goodsType);
         }
-
-        // throw new NullEntityReferenceException
-        return null;
+        throw new NullEntityReferenceException("GoodsType cannot be 'null'.");
     }
 
     @Override
@@ -38,9 +36,7 @@ public class GoodsTypeServiceImpl implements GoodsTypeService {
         if (goodsType != null) {
             return goodsTypeRepository.save(goodsType);
         }
-
-        // throw new NullEntityReferenceException
-        return null;
+        throw new NullEntityReferenceException("GoodsType cannot be 'null'.");
     }
 
     @Override
