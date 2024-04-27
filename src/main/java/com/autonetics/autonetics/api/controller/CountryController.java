@@ -8,7 +8,11 @@ import com.autonetics.autonetics.api.model.response.CountryDto;
 import com.autonetics.autonetics.api.service.CountryService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
@@ -17,13 +21,22 @@ public class CountryController {
     private CountryService countryService;
     private CountryMapper countryMapper;
 
+    @GetMapping
+    @Transactional(readOnly = true)
+    public ResponseEntity<List<CountryDto>> getAll() {
+        List<Country> countries = countryService.getAll();
+        return ResponseEntity.ok(countries.stream().map(countryMapper::toDto).collect(Collectors.toList()));
+    }
+
     @GetMapping("/by-code/{code}")
+    @Transactional(readOnly = true)
     public ResponseEntity<CountryDto> getByCode(@PathVariable("code") String code) {
         Country country = countryService.findByCode(code);
         return ResponseEntity.ok(countryMapper.toDto(country));
     }
 
     @GetMapping("/{countryId}")
+    @Transactional(readOnly = true)
     public ResponseEntity<CountryDto> getById(@PathVariable("countryId") int countryId) {
         Country country = countryService.readById(countryId);
         return ResponseEntity.ok(countryMapper.toDto(country));

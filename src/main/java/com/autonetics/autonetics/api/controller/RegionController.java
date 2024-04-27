@@ -20,6 +20,14 @@ public class RegionController {
     private RegionService regionService;
     private RegionMapper regionMapper;
 
+
+    @GetMapping
+    @Transactional(readOnly = true)
+    public ResponseEntity<List<RegionDto>> getAll() {
+        List<Region> regions = regionService.getAll();
+        return ResponseEntity.ok(regions.stream()
+                .map(regionMapper::toDto).collect(Collectors.toList()));
+    }
     @GetMapping("/{regionId}")
     @Transactional(readOnly = true)
     public ResponseEntity<RegionDto> getById(@PathVariable("regionId") int regionId) {
@@ -63,12 +71,13 @@ public class RegionController {
 
     @PatchMapping("/{regionId}")
     public ResponseEntity<RegionDto> update(@PathVariable("regionId") int regionId, @RequestBody NewRegionRequest newRegion) {
-        if (regionService.readById(regionId) == null) {
+        Region currentRegion = regionService.readById(regionId);
+        if (currentRegion == null) {
             return ResponseEntity.notFound().build();
         }
-        Region region = regionMapper.toEntity(newRegion);
-        region.setId(regionId);
-        return ResponseEntity.ok(regionMapper.toDto(regionService.update(region)));
+        regionMapper.partialUpdate(newRegion, currentRegion);
+        Region updatedRegion = regionService.update(currentRegion);
+        return ResponseEntity.ok(regionMapper.toDto(updatedRegion));
     }
 
     @DeleteMapping("/{regionId}")

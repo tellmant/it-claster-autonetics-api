@@ -11,5 +11,6 @@ public interface RegionService {
     Region create(Region region);
     Region update(Region region);
     void delete(int id);
+    List<Region> getAll();
 
 }

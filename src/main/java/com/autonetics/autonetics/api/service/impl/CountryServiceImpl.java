@@ -8,6 +8,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class CountryServiceImpl implements CountryService {
@@ -46,5 +48,10 @@ public class CountryServiceImpl implements CountryService {
     public Country readById(int id) {
         return countryRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Country with id " + id + " not found"));
+    }
+
+    @Override
+    public List<Country> getAll() {
+        return countryRepository.findAll();
     }
 }

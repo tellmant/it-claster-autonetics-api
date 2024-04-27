@@ -61,4 +61,9 @@ public class RegionServiceImpl implements RegionService {
         Region region = readById(id);
         regionRepository.delete(region);
     }
+
+    @Override
+    public List<Region> getAll() {
+        return regionRepository.findAll();
+    }
 }
