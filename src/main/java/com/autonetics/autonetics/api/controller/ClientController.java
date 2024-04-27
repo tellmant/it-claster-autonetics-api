@@ -22,7 +22,7 @@ import java.util.List;
 public class ClientController {
     private final ClientService clientService;
     private final ClientMapper clientMapper;
-//    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
 
     @GetMapping
@@ -47,7 +47,7 @@ public class ClientController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Client client = clientService.create(clientMapper.toEntity(newClientRequest));
-//        client.setPassword(passwordEncoder.encode(client.getPassword());
+        client.setPassword(passwordEncoder.encode(client.getPassword()));
         client.setUpdatedOn(Instant.now());
         return new ResponseEntity<>(clientMapper.toDto(client), HttpStatus.CREATED);
     }
@@ -59,7 +59,7 @@ public class ClientController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         client = clientMapper.toEntity(newClientRequest);
-//        client.setPassword(passwordEncoder.encode(client.getPassword());
+        client.setPassword(passwordEncoder.encode(client.getPassword()));
         client = clientService.update(client);
         return new ResponseEntity<>(clientMapper.toDto(client), HttpStatus.OK);
     }
