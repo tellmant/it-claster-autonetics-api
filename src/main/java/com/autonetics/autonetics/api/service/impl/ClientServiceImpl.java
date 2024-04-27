@@ -1,5 +1,6 @@
 package com.autonetics.autonetics.api.service.impl;
 
+import com.autonetics.autonetics.api.exception.NullEntityReferenceException;
 import com.autonetics.autonetics.api.model.entity.Client;
 import com.autonetics.autonetics.api.repository.ClientRepository;
 import com.autonetics.autonetics.api.service.ClientService;
@@ -21,8 +22,7 @@ public class ClientServiceImpl implements ClientService {
         if (client != null) {
             return clientRepository.save(client);
         }
-        // throw new NullEntityReferenceException("Client cannot be 'null'");
-        return null;
+         throw new NullEntityReferenceException("Client cannot be 'null'");
     }
 
     @Override
@@ -36,8 +36,7 @@ public class ClientServiceImpl implements ClientService {
         if (client != null) {
             return clientRepository.save(client);
         }
-        // throw new NullEntityReferenceException("Client cannot be 'null'");
-        return null;
+         throw new NullEntityReferenceException("Client cannot be 'null'");
     }
 
     @Override
