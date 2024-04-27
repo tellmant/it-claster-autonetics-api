@@ -5,8 +5,8 @@ import com.autonetics.autonetics.api.repository.ClientRepository;
 import com.autonetics.autonetics.api.service.ClientService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -53,15 +53,15 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client findByEmail(String email) {
-        return clientRepository.findByEmail(email);
+        return clientRepository.findByEmail(email)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Client with email " + email + " not found.")
+                );
     }
 
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        Client client = clientRepository.findByEmail(username);
-//        if (client == null) {
-//            throw new UsernameNotFoundException("Client not Found!");
-//        }
-//        return client;
-//    }
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return clientRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+    }
 }
