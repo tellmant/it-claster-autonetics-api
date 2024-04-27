@@ -15,4 +15,7 @@ public interface CountryMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Country partialUpdate(NewCountryRequest newCountryRequest, @MappingTarget Country country);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Country partialUpdate(CountryDto countryDto, @MappingTarget Country country);
 }
