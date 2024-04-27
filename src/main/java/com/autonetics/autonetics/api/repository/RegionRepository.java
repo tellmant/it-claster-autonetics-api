@@ -1,8 +1,6 @@
 package com.autonetics.autonetics.api.repository;
 
-import com.autonetics.autonetics.api.model.entity.Country;
 import com.autonetics.autonetics.api.model.entity.Region;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
