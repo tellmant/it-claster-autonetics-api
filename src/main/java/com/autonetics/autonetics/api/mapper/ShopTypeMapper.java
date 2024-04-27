@@ -13,6 +13,4 @@ public interface ShopTypeMapper {
 
     ShopType toEntity(NewShopTypeRequest newShopTypeRequest);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    ShopType partialUpdate(NewShopTypeRequest newShopTypeRequest, @MappingTarget ShopType shopType);
 }
