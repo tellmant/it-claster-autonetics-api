@@ -63,12 +63,13 @@ public class RegionController {
 
     @PatchMapping("/{regionId}")
     public ResponseEntity<RegionDto> update(@PathVariable("regionId") int regionId, @RequestBody NewRegionRequest newRegion) {
-        if (regionService.readById(regionId) == null) {
+        Region currentRegion = regionService.readById(regionId);
+        if (currentRegion == null) {
             return ResponseEntity.notFound().build();
         }
-        Region region = regionMapper.toEntity(newRegion);
-        region.setId(regionId);
-        return ResponseEntity.ok(regionMapper.toDto(regionService.update(region)));
+        regionMapper.partialUpdate(newRegion, currentRegion);
+        Region updatedRegion = regionService.update(currentRegion);
+        return ResponseEntity.ok(regionMapper.toDto(updatedRegion));
     }
 
     @DeleteMapping("/{regionId}")
