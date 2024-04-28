@@ -1,6 +1,5 @@
 package com.autonetics.autonetics.api.mapper;
 
-import com.autonetics.autonetics.api.mapper.RegionMapper;
 import com.autonetics.autonetics.api.model.entity.District;
 import com.autonetics.autonetics.api.model.request.NewDistrictRequest;
 import com.autonetics.autonetics.api.model.response.DistrictDto;
