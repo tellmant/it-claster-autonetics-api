@@ -8,7 +8,8 @@ import org.mapstruct.*;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING, uses = {CountryMapper.class})
 public interface RegionMapper {
     Region toEntity(RegionDto regionDto);
-    @Mapping(source = "country", target = "countryID")
+
+    @Mapping(source = "country", target = "country")
     RegionDto toDto(Region region);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
