@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -18,11 +19,6 @@ public class Goods {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "GoodsID", nullable = false)
     private Integer id;
-
-    @Size(max = 50)
-    @NotNull
-    @Column(name = "Name", nullable = false, length = 50)
-    private String name;
 
     @Column(name = "PriceIn", precision = 38, scale = 2)
     private BigDecimal priceIn;
@@ -36,38 +32,9 @@ public class Goods {
     @Column(name = "Weight")
     private Float weight;
 
-    @Size(max = 300)
-    @NotNull
-    @Column(name = "Description", nullable = false, length = 300)
-    private String description;
-
-    @Size(max = 50)
-    @NotNull
-    @Column(name = "Producer", nullable = false, length = 50)
-    private String producer;
-
-    @Column(name = "CountryID")
-    private Long countryID;
-
-    @Size(max = 100)
-    @NotNull
-    @Column(name = "StorageCondition", nullable = false, length = 100)
-    private String storageCondition;
-
-    @Size(max = 1000)
-    @NotNull
-    @Column(name = "Composition", nullable = false, length = 1000)
-    private String composition;
-
-    @Column(name = "SupplierID")
-    private Long supplierID;
-
     @NotNull
     @Column(name = "Rating", nullable = false)
     private Integer rating;
-
-    @Column(name = "ClassID")
-    private Long classID;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -78,12 +45,43 @@ public class Goods {
     @Column(name = "Barcode", length = 50)
     private String barcode;
 
-    @Size(max = 50)
-    @NotNull
-    @Column(name = "UpdatedBy", nullable = false, length = 50)
-    private String updatedBy;
-
     @Column(name = "UpdatedOn")
     private Instant updatedOn;
+
+    @Size(max = 255)
+    @Column(name = "Name")
+    private String name;
+
+    @Size(max = 255)
+    @Column(name = "Description")
+    private String description;
+
+    @Size(max = 255)
+    @Column(name = "Producer")
+    private String producer;
+
+    @Size(max = 255)
+    @Column(name = "StorageCondition")
+    private String storageCondition;
+
+    @Size(max = 255)
+    @Column(name = "Composition")
+    private String composition;
+
+    @Size(max = 255)
+    @Column(name = "UpdatedBy")
+    private String updatedBy;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CountryID")
+    private Country countryID;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ClassID")
+    private Class classID;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SupplierID")
+    private Supplier supplierID;
 
 }
