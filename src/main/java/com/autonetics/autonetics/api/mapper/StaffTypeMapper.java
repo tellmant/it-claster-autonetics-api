@@ -16,8 +16,6 @@ public interface StaffTypeMapper {
 
     StaffType toEntity(NewStaffTypeRequest newStaffTypeRequest);
 
-    NewStaffTypeRequest toDto1(StaffType staffType);
-
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     StaffType partialUpdate(NewStaffTypeRequest newStaffTypeRequest, @MappingTarget StaffType staffType);
 }
