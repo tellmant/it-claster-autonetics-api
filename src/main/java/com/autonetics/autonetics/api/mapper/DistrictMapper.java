@@ -16,8 +16,6 @@ public interface DistrictMapper {
 
     District toEntity(NewDistrictRequest newDistrictRequest);
 
-    NewDistrictRequest toDto1(District district);
-
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     District partialUpdate(NewDistrictRequest newDistrictRequest, @MappingTarget District district);
 }

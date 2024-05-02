@@ -16,8 +16,6 @@ public interface SettlementMapper {
 
     Settlement toEntity(NewSettlementRequest newSettlementRequest);
 
-    NewSettlementRequest toDto1(Settlement settlement);
-
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Settlement partialUpdate(NewSettlementRequest newSettlementRequest, @MappingTarget Settlement settlement);
 }

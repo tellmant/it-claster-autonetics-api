@@ -1,6 +1,5 @@
 package com.autonetics.autonetics.api.mapper;
 
-import com.autonetics.autonetics.api.mapper.StreetMapper;
 import com.autonetics.autonetics.api.model.entity.Address;
 import com.autonetics.autonetics.api.model.request.NewAddressRequest;
 import com.autonetics.autonetics.api.model.response.AddressDto;

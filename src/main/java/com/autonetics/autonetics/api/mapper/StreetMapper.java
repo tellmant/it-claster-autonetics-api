@@ -22,4 +22,7 @@ public interface StreetMapper {
     StreetType toEntity(StreetTypeDto streetTypeDto);
 
     Street toEntity(NewStreetRequest newStreetRequest);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Street partialUpdate(StreetDto streetShortDto, @MappingTarget Street street);
 }
