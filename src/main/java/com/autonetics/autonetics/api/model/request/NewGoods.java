@@ -1,5 +1,6 @@
 package com.autonetics.autonetics.api.model.request;
 
+import com.autonetics.autonetics.api.model.response.CountryDto;
 import com.autonetics.autonetics.api.model.response.GoodsTypeDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,8 +25,7 @@ public record NewGoods(
         Long supplierID,
         @NotNull Integer rating,
         Long classID,
-        @NotNull GoodsTypeDto goodsTypeId,
-        @Size(max = 50) String barcode,
-        @NotNull @Size(max = 50) String updatedBy
+        @NotNull Long goodsTypeId,
+        @Size(max = 50) String barcode
 ) {
 }

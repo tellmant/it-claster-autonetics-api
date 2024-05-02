@@ -20,8 +20,7 @@ public record PatchGoods(
         Long supplierID,
         @NotNull Integer rating,
         Long classID,
-        @NotNull GoodsTypeDto goodsTypeId,
-        @Size(max = 50) String barcode,
-        @NotNull @Size(max = 50) String updatedBy
+        @NotNull Long goodsTypeId,
+        @Size(max = 50) String barcode
 ) {
 }
