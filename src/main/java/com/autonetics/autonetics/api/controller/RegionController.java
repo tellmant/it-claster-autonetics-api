@@ -4,6 +4,7 @@ import com.autonetics.autonetics.api.mapper.RegionMapper;
 import com.autonetics.autonetics.api.model.entity.Region;
 import com.autonetics.autonetics.api.model.request.NewRegionRequest;
 import com.autonetics.autonetics.api.model.response.RegionDto;
+import com.autonetics.autonetics.api.service.CountryService;
 import com.autonetics.autonetics.api.service.RegionService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/location/regions")
 public class RegionController {
     private RegionService regionService;
+    private CountryService countryService;
     private RegionMapper regionMapper;
 
 
@@ -65,8 +67,12 @@ public class RegionController {
         if (newRegion == null) {
             return ResponseEntity.badRequest().build();
         }
-        Region region = regionService.create(regionMapper.toEntity(newRegion));
-        return ResponseEntity.ok(regionMapper.toDto(region));
+        Region region = regionMapper.toEntity(newRegion);
+        int countryId = newRegion.countryId();
+        region.setCountry(countryService.readById(countryId));
+
+        Region savedRegion = regionService.create(region);
+        return ResponseEntity.ok(regionMapper.toDto(savedRegion));
     }
 
     @PatchMapping("/{regionId}")
@@ -74,6 +80,10 @@ public class RegionController {
         Region currentRegion = regionService.readById(regionId);
         if (currentRegion == null) {
             return ResponseEntity.notFound().build();
+        }
+        if (newRegion.countryId() != null) {
+            int countryId = newRegion.countryId();
+            currentRegion.setCountry(countryService.readById(countryId));
         }
         regionMapper.partialUpdate(newRegion, currentRegion);
         Region updatedRegion = regionService.update(currentRegion);
