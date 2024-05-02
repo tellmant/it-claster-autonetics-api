@@ -2,14 +2,15 @@ package com.autonetics.autonetics.api.controller;
 
 import com.autonetics.autonetics.api.mapper.GoodsMapper;
 import com.autonetics.autonetics.api.mapper.GoodsTypeMapper;
-import com.autonetics.autonetics.api.model.entity.Goods;
+import com.autonetics.autonetics.api.model.entity.*;
+import com.autonetics.autonetics.api.model.entity.Class;
 import com.autonetics.autonetics.api.model.request.NewGoods;
 import com.autonetics.autonetics.api.model.request.PatchGoods;
 import com.autonetics.autonetics.api.model.response.GoodsCreated;
 import com.autonetics.autonetics.api.model.response.GoodsDeleted;
 import com.autonetics.autonetics.api.model.response.GoodsDto;
 import com.autonetics.autonetics.api.model.response.GoodsUpdated;
-import com.autonetics.autonetics.api.service.GoodsService;
+import com.autonetics.autonetics.api.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,13 +28,20 @@ public class GoodsController {
 
     private final GoodsService goodsService;
     private final GoodsMapper goodsMapper;
-    private final GoodsTypeMapper goodsTypeMapper;
+
+    private final GoodsTypeService goodsTypeService;
+    private final SupplierService supplierService;
+    private final ClassService classService;
+    private final CountryService countryService;
 
     @Autowired
-    public GoodsController(GoodsService goodsService, GoodsMapper goodsMapper, GoodsTypeMapper goodsTypeMapper) {
+    public GoodsController(GoodsService goodsService, GoodsMapper goodsMapper, GoodsTypeService goodsTypeService, SupplierService supplierService, ClassService classService, CountryService countryService) {
         this.goodsService = goodsService;
         this.goodsMapper = goodsMapper;
-        this.goodsTypeMapper = goodsTypeMapper;
+        this.goodsTypeService = goodsTypeService;
+        this.supplierService = supplierService;
+        this.classService = classService;
+        this.countryService = countryService;
     }
 
     @Transactional(readOnly = true)
@@ -56,9 +64,18 @@ public class GoodsController {
 
     @PostMapping
     public ResponseEntity<GoodsCreated> create(@Validated @RequestBody NewGoods newGoods) {
+        GoodsType goodsType = goodsTypeService.readById(newGoods.goodsTypeId());
+        Country country = countryService.readById(Math.toIntExact(newGoods.countryID()));
+        Class classEntity = classService.readById(newGoods.classID());
+        Supplier supplier = supplierService.readById(newGoods.supplierID());
+
         Goods goods = goodsMapper.toEntity(newGoods);
         goods.setUpdatedOn(Instant.now());
         goods.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
+        goods.setGoodsTypeId(goodsType);
+        goods.setCountryID(country);
+        goods.setClassID(classEntity);
+        goods.setSupplierID(supplier);
 
         Goods createdGoods = goodsService.create(goods);
 
@@ -67,10 +84,19 @@ public class GoodsController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<GoodsUpdated> update(@PathVariable long id, @Validated @RequestBody PatchGoods patchGoods) {
+        GoodsType goodsType = goodsTypeService.readById(patchGoods.goodsTypeId());
+        Country country = countryService.readById(Math.toIntExact(patchGoods.countryID()));
+        Class classEntity = classService.readById(patchGoods.classID());
+        Supplier supplier = supplierService.readById(patchGoods.supplierID());
+
         Goods goods = goodsMapper.toEntity(patchGoods);
         goods.setId((int) id);
         goods.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         goods.setUpdatedOn(Instant.now());
+        goods.setGoodsTypeId(goodsType);
+        goods.setCountryID(country);
+        goods.setClassID(classEntity);
+        goods.setSupplierID(supplier);
 
         Goods updatedGoods = goodsService.update(goods);
 
