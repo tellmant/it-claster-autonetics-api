@@ -63,7 +63,7 @@ public class DistrictController {
             return ResponseEntity.badRequest().build();
         }
         District district = districtMapper.toEntity(newDistrict);
-        district.setRegion(regionService.readById(newDistrict.regionId())); // set the region
+        district.setRegion(regionService.readById(newDistrict.regionId()));
         district.setUpdatedOn(LocalDateTime.now());
         district.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.ok(districtMapper.toDto(districtService.create(district)));
