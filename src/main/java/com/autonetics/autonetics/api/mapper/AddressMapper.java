@@ -14,8 +14,11 @@ public interface AddressMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Address partialUpdate(AddressDto addressDto, @MappingTarget Address address);
 
+    @Mapping(source = "streetId", target = "street.id")
+    @Mapping(source = "settlementId", target = "settlement.id")
     Address toEntity(NewAddressRequest newAddressRequest);
 
+    @InheritConfiguration(name = "toEntity")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Address partialUpdate(NewAddressRequest newAddressRequest, @MappingTarget Address address);
 }
