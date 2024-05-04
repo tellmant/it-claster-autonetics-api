@@ -14,10 +14,10 @@ public interface SettlementMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Settlement partialUpdate(SettlementDto settlementDto, @MappingTarget Settlement settlement);
 
+    @Mapping(source = "districtId", target = "district.id")
+    @Mapping(source = "settlementTypeId", target = "settlementType.id")
     Settlement toEntity(NewSettlementRequest newSettlementRequest);
 
-    NewSettlementRequest toDto1(Settlement settlement);
-
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Settlement partialUpdate(NewSettlementRequest newSettlementRequest, @MappingTarget Settlement settlement);
+    Settlement partialUpdate(@MappingTarget Settlement settlement, NewSettlementRequest newSettlementRequest);
 }
