@@ -1,6 +1,5 @@
 package com.autonetics.autonetics.api.controller;
 
-import com.autonetics.autonetics.api.exception.NullEntityReferenceException;
 import com.autonetics.autonetics.api.mapper.CustomerMapper;
 import com.autonetics.autonetics.api.model.entity.Address;
 import com.autonetics.autonetics.api.model.entity.Customer;
