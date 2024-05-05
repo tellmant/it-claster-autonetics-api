@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -47,5 +48,45 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public List<Goods> getAll() {
         return goodsRepository.findAll();
+    }
+
+    @Override
+    public Goods readByBarcode(String barcode) {
+        return goodsRepository.findByBarcode(barcode)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Goods with barcode " + barcode + " not found.")
+                );
+    }
+
+    @Override
+    public List<Goods> readByGoodsTypeId_Name(String name) {
+        return goodsRepository.findByGoodsTypeId_NameContains(name)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Goods with type name " + name + " not found.")
+                );
+    }
+
+    @Override
+    public List<Goods> readByClassID_Name(String name) {
+        return goodsRepository.findByClassID_NameContains(name)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Goods with class name " + name + " not found.")
+                );
+    }
+
+    @Override
+    public List<Goods> readByName(String name) {
+        return goodsRepository.findByNameContains(name)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Goods with name " + name + " not found.")
+                );
+    }
+
+    @Override
+    public List<Goods> readByProducer(String producer) {
+        return goodsRepository.findByProducerContains(producer)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Goods with producer " + producer + " not found.")
+                );
     }
 }
