@@ -62,6 +62,57 @@ public class GoodsController {
         return new ResponseEntity<>(goodsMapper.toDto(goods), HttpStatus.OK);
     }
 
+    @Transactional(readOnly = true)
+    @GetMapping("/barcode/{barcode}")
+    public ResponseEntity<GoodsDto> readByBarcode(@PathVariable String barcode) {
+        Goods goods = goodsService.readByBarcode(barcode);
+        return new ResponseEntity<>(goodsMapper.toDto(goods), HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/goodsTypeName/{name}")
+    public ResponseEntity<List<GoodsDto>> readByGoodsTypeName(@PathVariable String name) {
+        List<Goods> goods = goodsService.readByGoodsTypeId_Name(name);
+        List<GoodsDto> goodsDtoList = goods.stream()
+                .map(goodsMapper::toDto)
+                .toList();
+
+        return new ResponseEntity<>(goodsDtoList, HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/className/{name}")
+    public ResponseEntity<List<GoodsDto>> readByClassName(@PathVariable String name) {
+        List<Goods> goods = goodsService.readByClassID_Name(name);
+        List<GoodsDto> goodsDtoList = goods.stream()
+                .map(goodsMapper::toDto)
+                .toList();
+
+        return new ResponseEntity<>(goodsDtoList, HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/name/{name}")
+    public ResponseEntity<List<GoodsDto>> readByName(@PathVariable String name) {
+        List<Goods> goods = goodsService.readByName(name);
+        List<GoodsDto> goodsDtoList = goods.stream()
+                .map(goodsMapper::toDto)
+                .toList();
+
+        return new ResponseEntity<>(goodsDtoList, HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/producer/{producer}")
+    public ResponseEntity<List<GoodsDto>> readByProducer(@PathVariable String producer) {
+        List<Goods> goods = goodsService.readByProducer(producer);
+        List<GoodsDto> goodsDtoList = goods.stream()
+                .map(goodsMapper::toDto)
+                .toList();
+
+        return new ResponseEntity<>(goodsDtoList, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<GoodsCreated> create(@Validated @RequestBody NewGoods newGoods) {
         GoodsType goodsType = goodsTypeService.readById(newGoods.goodsTypeId());
