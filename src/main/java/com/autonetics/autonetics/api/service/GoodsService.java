@@ -3,6 +3,7 @@ package com.autonetics.autonetics.api.service;
 import com.autonetics.autonetics.api.model.entity.Goods;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GoodsService {
 
@@ -15,4 +16,14 @@ public interface GoodsService {
     void delete(long id);
 
     List<Goods> getAll();
+
+    Goods readByBarcode(String barcode);
+
+    List<Goods> readByGoodsTypeId_Name(String name);
+
+    List<Goods> readByClassID_Name(String name);
+
+    List<Goods> readByName(String name);
+
+    List<Goods> readByProducer(String producer);
 }
