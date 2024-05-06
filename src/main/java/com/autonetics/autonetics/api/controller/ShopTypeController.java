@@ -59,7 +59,7 @@ public class ShopTypeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         ShopType updatedShopType = shopTypeMapper.toEntity(newShopTypeRequest);
-        updatedShopType.setId(id);
+        updatedShopType.setId((int) id);
         updatedShopType.setUpdatedOn(LocalDateTime.now());
         updatedShopType = shopTypeService.update(updatedShopType);
         return ResponseEntity.ok(shopTypeMapper.toDto(updatedShopType));
