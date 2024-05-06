@@ -67,9 +67,11 @@ public class CustomerController {
     @PatchMapping("/{id}")
     public ResponseEntity<CustomerDto> updateCustomer(@PathVariable Long id, @RequestBody NewCustomerRequest newCustomer) {
         Customer customer = customerService.readById(id);
+        Address newAddress = addressService.readById(newCustomer.addressId());
         customerMapper.partialUpdate(newCustomer, customer);
         customer.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         customer.setUpdatedOn(LocalDateTime.now());
+        customer.setAddress(newAddress);
         if (newCustomer.onlineShoping() == null || !newCustomer.onlineShoping()){
             customer.setWebsite("NO WEBSITE");
         }
