@@ -1,7 +1,7 @@
 package com.autonetics.autonetics.api.controller;
 
 import com.autonetics.autonetics.api.mapper.GoodsMapper;
-import com.autonetics.autonetics.api.mapper.GoodsTypeMapper;
+
 import com.autonetics.autonetics.api.model.entity.*;
 import com.autonetics.autonetics.api.model.entity.Class;
 import com.autonetics.autonetics.api.model.request.NewGoods;
@@ -70,7 +70,7 @@ public class GoodsController {
     }
 
     @Transactional(readOnly = true)
-    @GetMapping("/goodsTypeName/{name}")
+    @GetMapping("/goods-type-name/{name}")
     public ResponseEntity<List<GoodsDto>> readByGoodsTypeName(@PathVariable String name) {
         List<Goods> goods = goodsService.readByGoodsTypeId_Name(name);
         List<GoodsDto> goodsDtoList = goods.stream()
@@ -81,7 +81,7 @@ public class GoodsController {
     }
 
     @Transactional(readOnly = true)
-    @GetMapping("/className/{name}")
+    @GetMapping("/class-name/{name}")
     public ResponseEntity<List<GoodsDto>> readByClassName(@PathVariable String name) {
         List<Goods> goods = goodsService.readByClassID_Name(name);
         List<GoodsDto> goodsDtoList = goods.stream()
