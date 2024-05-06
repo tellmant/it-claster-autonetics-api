@@ -9,6 +9,7 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -83,5 +84,13 @@ public class Goods {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SupplierID")
     private Supplier supplierID;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(
+            name = "Delivery_goods_detail",
+            joinColumns = @JoinColumn(name = "GoodsID"),
+            inverseJoinColumns = @JoinColumn(name = "Delivery_goodsID")
+    )
+    private List<DeliveryGoods> deliveredGoodsDetails;
 
 }

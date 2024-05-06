@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -51,5 +52,13 @@ public class DeliveryGoods {
     @Size(max = 255)
     @Column(name = "UpdatedBy")
     private String updatedBy;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(
+            name = "Delivery_goods_detail",
+            joinColumns = @JoinColumn(name = "Delivery_goodsID"),
+            inverseJoinColumns = @JoinColumn(name = "GoodsID")
+    )
+    private List<Goods> deliveredGoodsDetails;
 
 }
