@@ -1,7 +1,7 @@
 package com.autonetics.autonetics.api.controller;
 
 import com.autonetics.autonetics.api.mapper.GoodsMapper;
-import com.autonetics.autonetics.api.mapper.GoodsTypeMapper;
+
 import com.autonetics.autonetics.api.model.entity.*;
 import com.autonetics.autonetics.api.model.entity.Class;
 import com.autonetics.autonetics.api.model.request.NewGoods;
