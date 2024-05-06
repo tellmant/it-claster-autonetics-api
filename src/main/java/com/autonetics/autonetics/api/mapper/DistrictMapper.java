@@ -14,10 +14,10 @@ public interface DistrictMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     District partialUpdate(DistrictDto districtDto, @MappingTarget District district);
 
+    @Mapping(source = "regionId", target = "region.id")
     District toEntity(NewDistrictRequest newDistrictRequest);
 
-    NewDistrictRequest toDto1(District district);
-
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(source = "regionId", target = "region.id")
     District partialUpdate(NewDistrictRequest newDistrictRequest, @MappingTarget District district);
 }
