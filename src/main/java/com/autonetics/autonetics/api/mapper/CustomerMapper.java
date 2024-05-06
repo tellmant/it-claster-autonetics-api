@@ -24,6 +24,5 @@ public interface CustomerMapper {
 
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(source = "addressId", target = "address.id")
     Customer partialUpdate(NewCustomerRequest newCustomerRequest, @MappingTarget Customer customer);
 }
