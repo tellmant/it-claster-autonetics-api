@@ -5,10 +5,7 @@ import com.autonetics.autonetics.api.model.entity.DeliveryGoods;
 import com.autonetics.autonetics.api.model.entity.Goods;
 import com.autonetics.autonetics.api.model.entity.Supplier;
 import com.autonetics.autonetics.api.model.request.NewDeliveryGoods;
-import com.autonetics.autonetics.api.model.response.DeliveryGoodsCreated;
-import com.autonetics.autonetics.api.model.response.DeliveryGoodsDeleted;
-import com.autonetics.autonetics.api.model.response.DeliveryGoodsDto;
-import com.autonetics.autonetics.api.model.response.DeliveryGoodsUpdated;
+import com.autonetics.autonetics.api.model.response.*;
 import com.autonetics.autonetics.api.service.DeliveryGoodsService;
 import com.autonetics.autonetics.api.service.GoodsService;
 import com.autonetics.autonetics.api.service.SupplierService;
@@ -123,6 +120,49 @@ public class DeliveryGoodsController {
                 .toList();
 
         return new ResponseEntity<>(deliveryGoodsDtoList, HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/details")
+    public ResponseEntity<List<DeliveryGoodsDetailDto>> getAllWithDetails() {
+        List<DeliveryGoods> deliveryGoodsList = deliveryGoodsService.getAll();
+        List<DeliveryGoodsDetailDto> deliveryGoodsDetailDtoList = deliveryGoodsList.stream()
+                .map(deliveryGoodsMapper::toDtoWithDetails)
+                .toList();
+
+        return new ResponseEntity<>(deliveryGoodsDetailDtoList, HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/details/{id}")
+    public ResponseEntity<DeliveryGoodsDetailDto> readByIdWithDetails(@PathVariable long id) {
+        DeliveryGoods deliveryGoods = deliveryGoodsService.readById(id);
+        return new ResponseEntity<>(deliveryGoodsMapper.toDtoWithDetails(deliveryGoods), HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/details/barcode/{barcode}")
+    public ResponseEntity<DeliveryGoodsDetailDto> readByBarcodeWithDetails(@PathVariable String barcode) {
+        DeliveryGoods deliveryGoods = deliveryGoodsService.readByBarcode(barcode);
+        return new ResponseEntity<>(deliveryGoodsMapper.toDtoWithDetails(deliveryGoods), HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/details/number/{number}")
+    public ResponseEntity<DeliveryGoodsDetailDto> readByNumberWithDetails(@PathVariable int number) {
+        DeliveryGoods deliveryGoods = deliveryGoodsService.readByNumber(number);
+        return new ResponseEntity<>(deliveryGoodsMapper.toDtoWithDetails(deliveryGoods), HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/details/supplier-name/{name}")
+    public ResponseEntity<List<DeliveryGoodsDetailDto>> readBySupplierNameWithDetails(@PathVariable String name) {
+        List<DeliveryGoods> deliveryGoodsList = deliveryGoodsService.readBySupplierNameContains(name);
+        List<DeliveryGoodsDetailDto> deliveryGoodsDetailDtoList = deliveryGoodsList.stream()
+                .map(deliveryGoodsMapper::toDtoWithDetails)
+                .toList();
+
+        return new ResponseEntity<>(deliveryGoodsDetailDtoList, HttpStatus.OK);
     }
 
     @PostMapping
