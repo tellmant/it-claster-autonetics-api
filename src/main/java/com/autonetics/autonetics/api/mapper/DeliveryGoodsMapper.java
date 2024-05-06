@@ -2,6 +2,7 @@ package com.autonetics.autonetics.api.mapper;
 
 import com.autonetics.autonetics.api.model.entity.DeliveryGoods;
 import com.autonetics.autonetics.api.model.request.NewDeliveryGoods;
+import com.autonetics.autonetics.api.model.response.DeliveryGoodsDetailDto;
 import com.autonetics.autonetics.api.model.response.DeliveryGoodsDto;
 import org.mapstruct.*;
 
@@ -10,6 +11,8 @@ public interface DeliveryGoodsMapper {
     DeliveryGoods toEntity(DeliveryGoodsDto deliveryGoodsDto);
 
     DeliveryGoodsDto toDto(DeliveryGoods deliveryGoods);
+
+    DeliveryGoodsDetailDto toDtoWithDetails(DeliveryGoods deliveryGoods);
 
     @Mapping(target = "goodsID", ignore = true)
     @Mapping(target = "supplierID", ignore = true)
