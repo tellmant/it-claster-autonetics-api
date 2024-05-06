@@ -15,4 +15,7 @@ public interface ClientMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Client partialUpdate(ClientDto clientDto, @MappingTarget Client client);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Client partialUpdate(NewClientRequest newClientRequest, @MappingTarget Client client);
 }

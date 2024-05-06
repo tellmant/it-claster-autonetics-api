@@ -8,13 +8,14 @@ import com.autonetics.autonetics.api.service.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
@@ -29,43 +30,53 @@ public class ClientController {
     @Transactional(readOnly = true)
     public List<ClientDto> getAll() {
         return clientService.getAll().stream().map(clientMapper::toDto)
-                .collect(java.util.stream.Collectors.toList());
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ClientDto> getById(@PathVariable long id) {
         Client client = clientService.readById(id);
         if (client == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<>(clientMapper.toDto(client), HttpStatus.OK);
+        return ResponseEntity.ok(clientMapper.toDto(client));
     }
 
+    @GetMapping("/by-email/{email}")
+    public ResponseEntity<ClientDto> getByEmail(@PathVariable String email) {
+        if (email == null) {
+            return ResponseEntity.notFound().build();
+        }
+        Client client = clientService.findByEmail(email);
+        return ResponseEntity.ok(clientMapper.toDto(client));
+    }
+
+
     @PostMapping
-    public ResponseEntity<ClientDto> create(@Validated @RequestBody NewClientRequest newClientRequest) {
+    public ResponseEntity<ClientDto> create(@RequestBody NewClientRequest newClientRequest) {
         if (newClientRequest == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Client client = clientService.create(clientMapper.toEntity(newClientRequest));
         client.setPassword(passwordEncoder.encode(client.getPassword()));
+        client.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         client.setUpdatedOn(Instant.now());
         return new ResponseEntity<>(clientMapper.toDto(client), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ClientDto> update(@PathVariable long id,@Validated @RequestBody NewClientRequest newClientRequest) {
+    public ResponseEntity<ClientDto> update(@PathVariable long id, @RequestBody NewClientRequest newClientRequest) {
         Client client = clientService.readById(id);
-        if (client == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        client = clientMapper.toEntity(newClientRequest);
+        clientMapper.partialUpdate(newClientRequest, client);
+
         client.setPassword(passwordEncoder.encode(client.getPassword()));
-        client = clientService.update(client);
-        return new ResponseEntity<>(clientMapper.toDto(client), HttpStatus.OK);
+        client.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
+        client.setUpdatedOn(Instant.now());
+        return ResponseEntity.ok(clientMapper.toDto(clientService.update(client)));
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable long id) {
         clientService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }
