@@ -69,7 +69,10 @@ public class ClientController {
         Client client = clientService.readById(id);
         clientMapper.partialUpdate(newClientRequest, client);
 
-        client.setPassword(passwordEncoder.encode(client.getPassword()));
+        if (newClientRequest.password() != null) {
+            client.setPassword(passwordEncoder.encode(newClientRequest.password()));
+        }
+
         client.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         client.setUpdatedOn(Instant.now());
         return ResponseEntity.ok(clientMapper.toDto(clientService.update(client)));
