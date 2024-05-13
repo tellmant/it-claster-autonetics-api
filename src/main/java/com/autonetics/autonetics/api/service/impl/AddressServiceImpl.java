@@ -78,6 +78,15 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
+    public List<Address> findLocationsWithin100Meters(BigDecimal latitude, BigDecimal longitude) {
+        if ((latitude.compareTo(BigDecimal.valueOf(-90)) < 0) || (latitude.compareTo(BigDecimal.valueOf(90)) > 0) ||
+                (longitude.compareTo(BigDecimal.valueOf(-180)) < 0) || (longitude.compareTo(BigDecimal.valueOf(180)) > 0)) {
+            throw new IllegalArgumentException("Invalid latitude or longitude");
+        }
+        return addressRepository.findLocationsWithin100Meters(latitude, longitude);
+    }
+
+    @Override
     public List<Address> getAll() {
         return addressRepository.findAll();
     }
