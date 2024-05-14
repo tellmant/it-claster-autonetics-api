@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +33,14 @@ public class ShopController {
     @Transactional(readOnly = true)
     public ResponseEntity<List<ShopDto>> getAllShops() {
         return ResponseEntity.ok(shopService.getAll().stream()
+                .map(shopMapper::toDto)
+                .collect(Collectors.toList()));
+    }
+
+    @GetMapping("/by-location")
+    @Transactional(readOnly = true)
+    public ResponseEntity<List<ShopDto>> getAllShopsIn500Meters(@RequestHeader BigDecimal latitude, @RequestHeader BigDecimal longitude) {
+        return ResponseEntity.ok(shopService.getAllIn500Meters(latitude, longitude).stream()
                 .map(shopMapper::toDto)
                 .collect(Collectors.toList()));
     }

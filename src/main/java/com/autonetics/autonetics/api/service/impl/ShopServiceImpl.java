@@ -7,12 +7,12 @@ import com.autonetics.autonetics.api.repository.CustomerRepository;
 import com.autonetics.autonetics.api.repository.ShopRepository;
 import com.autonetics.autonetics.api.repository.ShopTypeRepository;
 import com.autonetics.autonetics.api.service.ShopService;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+import java.math.BigDecimal;
 import java.util.List;
 
 @AllArgsConstructor
@@ -88,5 +88,14 @@ public class ShopServiceImpl implements ShopService {
             throw new NullEntityReferenceException("Name cannot be 'null' or empty.");
         }
         return shopRepository.findAllByNameContaining(name);
+    }
+
+    @Override
+    public List<Shop> getAllIn500Meters(BigDecimal latitude, BigDecimal longitude) {
+        if ((latitude.compareTo(BigDecimal.valueOf(-90)) < 0) || (latitude.compareTo(BigDecimal.valueOf(90)) > 0) ||
+                (longitude.compareTo(BigDecimal.valueOf(-180)) < 0) || (longitude.compareTo(BigDecimal.valueOf(180)) > 0)) {
+            throw new IllegalArgumentException("Invalid latitude or longitude");
+        }
+        return shopRepository.findAllIn500Meters(latitude, longitude);
     }
 }
