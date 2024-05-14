@@ -13,6 +13,6 @@ public interface AddressService {
     void delete(long id);
     Address findByLatitudeAndLongitude (BigDecimal latitude, BigDecimal longitude);
     List<Address> findAllByStreet_Id(Long streetId);
-    List<Address> findLocationsWithin100Meters(BigDecimal latitude, BigDecimal longitude);
+    List<Address> findLocationsWithin500Meters(BigDecimal latitude, BigDecimal longitude);
     List<Address> getAll();
 }
