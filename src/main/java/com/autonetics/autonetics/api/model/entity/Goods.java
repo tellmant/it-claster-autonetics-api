@@ -69,6 +69,9 @@ public class Goods {
     @Column(name = "Composition")
     private String composition;
 
+    @Column(name = "Photo")
+    private String photo;
+
     @Size(max = 255)
     @Column(name = "UpdatedBy")
     private String updatedBy;

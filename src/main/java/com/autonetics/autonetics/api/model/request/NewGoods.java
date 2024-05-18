@@ -26,6 +26,7 @@ public record NewGoods(
         @NotNull Integer rating,
         Long classID,
         @NotNull Long goodsTypeId,
-        @Size(max = 50) String barcode
+        @Size(max = 50) String barcode,
+        String photo
 ) {
 }
