@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
@@ -45,6 +46,10 @@ public class Client implements UserDetails {
     @Column(name = "Password", nullable = false, length = 50)
     private String password;
 
+    @Column(name = "Role", nullable = false, length = 50)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @Column(name = "UpdatedBy", nullable = false, length = 50)
     private String updatedBy;
 
@@ -53,7 +58,7 @@ public class Client implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
@@ -82,18 +87,14 @@ public class Client implements UserDetails {
     }
 
     @Override
-    public final boolean equals(Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null) return false;
-        java.lang.Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
-        java.lang.Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
-        if (thisEffectiveClass != oEffectiveClass) return false;
-        Client client = (Client) o;
-        return getId() != null && Objects.equals(getId(), client.getId());
+        if (!(o instanceof Client client)) return false;
+        return Objects.equals(id, client.id) && Objects.equals(firstName, client.firstName) && Objects.equals(lastName, client.lastName) && Objects.equals(birthDate, client.birthDate) && Objects.equals(gender, client.gender) && Objects.equals(phoneNumber, client.phoneNumber) && Objects.equals(email, client.email) && Objects.equals(password, client.password) && role == client.role && Objects.equals(updatedBy, client.updatedBy) && Objects.equals(updatedOn, client.updatedOn);
     }
 
     @Override
-    public final int hashCode() {
-        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, birthDate, gender, phoneNumber, email, password, role, updatedBy, updatedOn);
     }
 }

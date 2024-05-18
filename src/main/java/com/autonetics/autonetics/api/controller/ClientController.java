@@ -2,6 +2,7 @@ package com.autonetics.autonetics.api.controller;
 
 import com.autonetics.autonetics.api.mapper.ClientMapper;
 import com.autonetics.autonetics.api.model.entity.Client;
+import com.autonetics.autonetics.api.model.entity.Role;
 import com.autonetics.autonetics.api.model.request.NewClientRequest;
 import com.autonetics.autonetics.api.model.response.ClientDto;
 import com.autonetics.autonetics.api.service.ClientService;
@@ -61,6 +62,7 @@ public class ClientController {
         client.setPassword(passwordEncoder.encode(client.getPassword()));
         client.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         client.setUpdatedOn(Instant.now());
+        client.setRole(Role.ROLE_CLIENT);
         return new ResponseEntity<>(clientMapper.toDto(client), HttpStatus.CREATED);
     }
 
@@ -75,6 +77,7 @@ public class ClientController {
 
         client.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
         client.setUpdatedOn(Instant.now());
+        client.setRole(Role.ROLE_CLIENT);
         return ResponseEntity.ok(clientMapper.toDto(clientService.update(client)));
     }
     @DeleteMapping("/{id}")
