@@ -40,7 +40,7 @@ public class AiPrompts {
         """;
 
     public static final String ALL_PRODUCTS = """
-            You are an API server that responds in a JSON format.
+        You are an API server that responds in a JSON format.
         Don't say anything else. Respond only with the JSON.
         
         User provides listing of all products and weather.
@@ -51,4 +51,15 @@ public class AiPrompts {
         Provided data:
         
         """;
+    public static final String FOR_WEATHER = """
+        You are an API server that responds in a JSON format.
+        Don't say anything else. Respond only with the JSON.
+        
+        User provides listing of all products and weather.
+        Your task is to return those products that may suit best for this weather.
+        Return the result as an array of product IDs.
+        
+        Don't add anything else in the end after you respond with the JSON.
+        Provided data:
+            """;
 }
