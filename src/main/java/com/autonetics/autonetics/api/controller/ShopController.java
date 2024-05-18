@@ -3,6 +3,7 @@ package com.autonetics.autonetics.api.controller;
 import com.autonetics.autonetics.api.mapper.ShopMapper;
 import com.autonetics.autonetics.api.model.entity.Shop;
 import com.autonetics.autonetics.api.model.request.NewShopRequest;
+import com.autonetics.autonetics.api.model.response.LocationAndDistanceDto;
 import com.autonetics.autonetics.api.model.response.ShopDto;
 import com.autonetics.autonetics.api.service.AddressService;
 import com.autonetics.autonetics.api.service.CustomerService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,10 +41,26 @@ public class ShopController {
 
     @GetMapping("/by-location")
     @Transactional(readOnly = true)
-    public ResponseEntity<List<ShopDto>> getAllShopsIn500Meters(@RequestHeader BigDecimal latitude, @RequestHeader BigDecimal longitude) {
-        return ResponseEntity.ok(shopService.getAllIn500Meters(latitude, longitude).stream()
-                .map(shopMapper::toDto)
-                .collect(Collectors.toList()));
+    public ResponseEntity<List<LocationAndDistanceDto>> getAllShopsIn500Meters(@RequestHeader BigDecimal latitude, @RequestHeader BigDecimal longitude) {
+        List<LocationAndDistanceDto> locationList = shopService.getAllIn500Meters(latitude, longitude).stream()
+                .map(shop -> {
+                    LocationAndDistanceDto locationAndDistanceDto = shopMapper.toLocationAndDistance(shop);
+                    double distance = calculateDistanceInMeters(latitude, longitude, shop.getAddress().getLatitude(), shop.getAddress().getLongitude());
+                    return new LocationAndDistanceDto(
+                            locationAndDistanceDto.id(),
+                            locationAndDistanceDto.name(),
+                            distance,
+                            locationAndDistanceDto.isParking(),
+                            locationAndDistanceDto.atFloor(),
+                            locationAndDistanceDto.address(),
+                            locationAndDistanceDto.customer(),
+                            locationAndDistanceDto.shopType()
+
+                    );
+                }).sorted(Comparator.comparingDouble(LocationAndDistanceDto::distance))
+                .toList();
+
+        return ResponseEntity.ok(locationList);
     }
 
     @GetMapping("/by-address-id/{addressId}")
@@ -69,7 +87,7 @@ public class ShopController {
                 .collect(Collectors.toList()));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/by-id/{id}")
     @Transactional(readOnly = true)
     public ResponseEntity<ShopDto> getShopById(@PathVariable Long id) {
         return ResponseEntity.ok(shopMapper.toDto(shopService.readById(id)));
@@ -134,5 +152,20 @@ public class ShopController {
     public ResponseEntity<Void> deleteShop(@PathVariable Long id) {
         shopService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private double calculateDistanceInMeters(BigDecimal lat1, BigDecimal lon1, BigDecimal lat2, BigDecimal lon2) {
+        int earthRadiusKm = 6371;
+
+        double latDistance = Math.toRadians(lat2.doubleValue() - lat1.doubleValue());
+        double lonDistance = Math.toRadians(lon2.doubleValue() - lon1.doubleValue());
+
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1.doubleValue())) * Math.cos(Math.toRadians(lat2.doubleValue()))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return earthRadiusKm * c * 1000; // convert to meters
     }
 }
