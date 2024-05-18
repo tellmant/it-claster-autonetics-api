@@ -16,6 +16,7 @@ public record GoodsDto(
         BigDecimal priceIn,
         BigDecimal priceOut,
         BigDecimal priceAI,
+        String photo,
         Float weight,
         @NotNull Integer rating,
         @NotNull GoodsTypeDto goodsTypeId,
