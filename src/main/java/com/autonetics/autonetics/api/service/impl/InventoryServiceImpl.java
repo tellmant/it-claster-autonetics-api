@@ -2,7 +2,6 @@ package com.autonetics.autonetics.api.service.impl;
 
 import com.autonetics.autonetics.api.exception.NullEntityReferenceException;
 import com.autonetics.autonetics.api.model.entity.Inventory;
-import com.autonetics.autonetics.api.repository.GoodsRepository;
 import com.autonetics.autonetics.api.repository.InventoryRepository;
 import com.autonetics.autonetics.api.service.InventoryService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,6 @@ import java.util.List;
 @Service
 public class InventoryServiceImpl implements InventoryService {
     private final InventoryRepository inventoryRepository;
-    private final GoodsRepository goodsRepository;
 
     @Override
     public Inventory create(Inventory inventory) {

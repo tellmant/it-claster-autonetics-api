@@ -1,6 +1,5 @@
 package com.autonetics.autonetics.api.service;
 
-import com.autonetics.autonetics.api.model.entity.Goods;
 import com.autonetics.autonetics.api.model.entity.Inventory;
 
 import java.util.List;
