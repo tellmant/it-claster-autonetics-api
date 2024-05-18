@@ -1,6 +1,8 @@
 package com.autonetics.autonetics.api.config;
 
+import com.autonetics.autonetics.api.mapper.impl.UserMapperImpl;
 import com.autonetics.autonetics.api.repository.ClientRepository;
+import com.autonetics.autonetics.api.repository.StaffRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +11,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -18,11 +19,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class ApplicationConfig {
 
     private final ClientRepository clientRepository;
+    private final StaffRepository staffRepository;
 
     @Bean
     public UserDetailsService userDetailsService() {
+        UserMapperImpl userMapper = new UserMapperImpl();
+
         return username -> clientRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+                .orElseGet(() -> userMapper.toClient(staffRepository.findByEmail(username)));
     }
 
     @Bean

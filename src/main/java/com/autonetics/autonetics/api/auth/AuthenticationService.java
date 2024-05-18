@@ -2,12 +2,15 @@ package com.autonetics.autonetics.api.auth;
 
 import com.autonetics.autonetics.api.mapper.ClientMapper;
 import com.autonetics.autonetics.api.model.entity.Client;
+import com.autonetics.autonetics.api.model.entity.Staff;
 import com.autonetics.autonetics.api.model.response.ClientDto;
 import com.autonetics.autonetics.api.repository.ClientRepository;
+import com.autonetics.autonetics.api.repository.StaffRepository;
 import com.autonetics.autonetics.api.service.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,7 @@ import java.time.Instant;
 public class AuthenticationService {
 
     private final ClientRepository clientRepository;
+    private final StaffRepository staffRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -47,13 +51,19 @@ public class AuthenticationService {
                 )
         );
 
-        Client client = clientRepository.findByEmail(request.getEmail())
-                .orElseThrow();
-
-        var jwtToken = jwtService.generateToken(client);
-
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        try {
+            Client client = clientRepository.findByEmail(request.getEmail())
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+            String jwtToken = jwtService.generateToken(client);
+            return AuthenticationResponse.builder()
+                    .token(jwtToken)
+                    .build();
+        } catch (UsernameNotFoundException e) {
+            Staff staff = staffRepository.findByEmail(request.getEmail());
+            String jwtToken = jwtService.generateToken(staff);
+            return AuthenticationResponse.builder()
+                    .token(jwtToken)
+                    .build();
+        }
     }
 }
