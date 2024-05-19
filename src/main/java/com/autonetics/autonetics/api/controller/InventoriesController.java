@@ -59,6 +59,29 @@ public class InventoriesController {
         return ResponseEntity.ok(inventoryDtoList);
     }
 
+    @GetMapping("/by-goods-id/{goodsId}/shop-id/{shopId}")
+    @Transactional(readOnly = true)
+    public ResponseEntity<InventoryDto> getByGoodsIdAndShopId(@PathVariable int goodsId, @PathVariable long shopId) {
+        InventoryDto inventoryDto = inventoryMapper.toDto(inventoryService.findByGoodsIdAndShopId(goodsId, shopId));
+        return ResponseEntity.ok(inventoryDto);
+    }
+
+    @GetMapping("/by-barcode/{barcode}/shop-id/{shopId}")
+    @Transactional(readOnly = true)
+    public ResponseEntity<List<InventoryDto>> getByBarcodeAndShopId(@PathVariable String barcode, @PathVariable long shopId) {
+        List<InventoryDto> inventoryDtoList = inventoryService.findAllByGoodsInShopByBarcode(barcode, shopId).stream().map(inventoryMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(inventoryDtoList);
+    }
+
+    @GetMapping("/by-name/{name}/shop-id/{shopId}")
+    @Transactional(readOnly = true)
+    public ResponseEntity<List<InventoryDto>> getByNameAndShopId(@PathVariable String name, @PathVariable long shopId) {
+        List<InventoryDto> inventoryDtoList = inventoryService.findAllByGoodsInShopByNameContains(name, shopId).stream().map(inventoryMapper::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(inventoryDtoList);
+    }
+
     @PostMapping
     public ResponseEntity<InventoryDto> create(@RequestBody NewInventoryRequest inventoryRequest) {
         Inventory inventory = inventoryMapper.toEntity(inventoryRequest);
@@ -100,6 +123,4 @@ public class InventoriesController {
         inventoryService.delete(id);
         return ResponseEntity.noContent().build();
     }
-
-
 }

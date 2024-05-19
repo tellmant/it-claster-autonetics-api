@@ -18,7 +18,13 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public Inventory create(Inventory inventory) {
         if (inventory != null) {
-            return inventoryRepository.save(inventory);
+            Inventory existingInventory = inventoryRepository.findByGoodsID_IdAndShopID_Id(inventory.getGoodsID().getId(), inventory.getShopID().getId());
+            if (existingInventory != null) {
+                existingInventory.setNumbers(existingInventory.getNumbers() + inventory.getNumbers());
+                return inventoryRepository.save(existingInventory);
+            } else {
+                return inventoryRepository.save(inventory);
+            }
         }
         throw new NullEntityReferenceException("Inventory cannot be 'null'");
     }
@@ -56,5 +62,20 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public List<Inventory> findAllShopsByGoodsID_Id(Integer goodsId) {
         return inventoryRepository.findAllByGoodsID_Id(goodsId);
+    }
+
+    @Override
+    public Inventory findByGoodsIdAndShopId(Integer goodsId, Long shopId) {
+        return inventoryRepository.findByGoodsID_IdAndShopID_Id(goodsId, shopId);
+    }
+
+    @Override
+    public List<Inventory> findAllByGoodsInShopByBarcode(String barcode, Long shopId) {
+        return inventoryRepository.findAllByGoodsID_BarcodeAndShopID_Id(barcode, shopId);
+    }
+
+    @Override
+    public List<Inventory> findAllByGoodsInShopByNameContains(String name, Long shopId) {
+        return inventoryRepository.findAllByGoodsID_NameContainsAndShopID_id(name, shopId);
     }
 }

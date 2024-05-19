@@ -12,4 +12,7 @@ public interface InventoryService {
     List<Inventory> getAll();
     List<Inventory> findAllGoodsByShopID_Id(Long shopId);
     List<Inventory> findAllShopsByGoodsID_Id(Integer goodsId);
+    Inventory findByGoodsIdAndShopId (Integer goodsId, Long shopId);
+    List<Inventory> findAllByGoodsInShopByBarcode(String barcode, Long shopId);
+    List<Inventory> findAllByGoodsInShopByNameContains(String name, Long shopId);
 }
