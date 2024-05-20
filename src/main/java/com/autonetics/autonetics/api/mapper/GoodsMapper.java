@@ -1,17 +1,12 @@
 package com.autonetics.autonetics.api.mapper;
 
 import com.autonetics.autonetics.api.model.entity.Goods;
-import com.autonetics.autonetics.api.model.entity.Supplier;
 import com.autonetics.autonetics.api.model.request.NewGoods;
 import com.autonetics.autonetics.api.model.request.PatchGoods;
+import com.autonetics.autonetics.api.model.request.RequestGoodsAi;
 import com.autonetics.autonetics.api.model.response.GoodsDto;
-import com.autonetics.autonetics.api.service.SupplierService;
-import jdk.jfr.Name;
 import org.mapstruct.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING, uses = {CountryMapper.class, ClassMapper.class, SupplierMapper.class, GoodsTypeMapper.class})
 public interface GoodsMapper {
@@ -34,5 +29,12 @@ public interface GoodsMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Goods partialUpdate(GoodsDto goodsDto, @MappingTarget Goods goods);
+
+    Goods toEntity(RequestGoodsAi requestGoodsAi);
+
+    RequestGoodsAi toAiDto(Goods goods);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Goods partialUpdate(RequestGoodsAi requestGoodsAi, @MappingTarget Goods goods);
 }
 

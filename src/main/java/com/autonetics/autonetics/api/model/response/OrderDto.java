@@ -1,5 +1,7 @@
 package com.autonetics.autonetics.api.model.response;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
