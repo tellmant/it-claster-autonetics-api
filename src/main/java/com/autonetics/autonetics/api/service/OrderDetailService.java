@@ -19,4 +19,5 @@ public interface OrderDetailService {
 
     OrderDetail findByClientBarcode(String barcode);
     OrderDetail findByGoodsBarcode(String barcode);
+    List<OrderDetail> findByClientEmail(String email);
 }
