@@ -11,7 +11,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     Optional<Order> findByBarcode(String barcode);
 
-    Optional<Order> findByClientID_Email(String email);
+    Optional<List<Order>> findByClientID_Email(String email);
 
     Optional<List<Order>> findByNameContains(String name);
 }
