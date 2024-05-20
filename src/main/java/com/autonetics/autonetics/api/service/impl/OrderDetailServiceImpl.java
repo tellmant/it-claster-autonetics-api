@@ -64,4 +64,11 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 () -> new EntityNotFoundException("OrderDetail with goods barcode " + barcode + " not found.")
         );
     }
+
+    @Override
+    public List<OrderDetail> findByClientEmail(String email) {
+        return orderDetailRepository.findByOrderID_ClientID_Email(email).orElseThrow(
+                () -> new EntityNotFoundException("OrderDetail with client email " + email + " not found.")
+        );
+    }
 }

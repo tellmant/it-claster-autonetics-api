@@ -74,6 +74,17 @@ public class OrderDetailController {
         return new ResponseEntity<>(orderDetailMapper.toDto(orderDetail), HttpStatus.OK);
     }
 
+    @Transactional(readOnly = true)
+    @GetMapping("/client-email/{email}")
+    public ResponseEntity<List<OrderDetailDto>> readByClientEmail(@PathVariable String email) {
+        List<OrderDetail> orderDetailList = orderDetailService.findByClientEmail(email);
+        List<OrderDetailDto> orderDetailDtoList = orderDetailList.stream()
+                .map(orderDetailMapper::toDto)
+                .toList();
+
+        return new ResponseEntity<>(orderDetailDtoList, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<OrderDetailCreated> create(@RequestBody NewOrderDetail newOrderDetail) {
         Order order = orderService.readById(newOrderDetail.orderID());
