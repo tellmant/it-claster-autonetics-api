@@ -56,4 +56,7 @@ public class Shop {
     @JoinColumn(name = "ShopTypeID")
     private ShopType shopType;
 
+    @Size(max = 255)
+    @Column(name = "Photo")
+    private String photo;
 }
