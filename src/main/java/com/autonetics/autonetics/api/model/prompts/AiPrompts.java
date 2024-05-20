@@ -3,6 +3,10 @@ package com.autonetics.autonetics.api.model.prompts;
 public class AiPrompts {
     public static final String GREETING = "Say hello in Ukrainian";
 
+    public static final String RESPONSE_TEMPLATE = """
+            [id,id,...,id]
+            """;
+
     public static final String PRICE_AI_MSG = """
         You are an API server that responds in a JSON format.
         Don't say anything else. Respond only with the JSON.
@@ -58,6 +62,18 @@ public class AiPrompts {
         User provides listing of all products and weather.
         Your task is to return those products that may suit best for this weather.
         Return the result as an array of product IDs.
+        
+        Don't add anything else in the end after you respond with the JSON.
+        Provided data:
+            """;
+
+    public static final String FOR_CLIENT = """
+        You are an API server that responds in a JSON format.
+        Don't say anything else. Respond only with array of goods id in JSON format.
+        You can't change response template.
+        
+        User provides listing of all products, weather and client's purchase history.
+        Your task is to return those products that may suit best for this client.
         
         Don't add anything else in the end after you respond with the JSON.
         Provided data:

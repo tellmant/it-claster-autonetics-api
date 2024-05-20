@@ -2,6 +2,7 @@ package com.autonetics.autonetics.api.mapper;
 
 import com.autonetics.autonetics.api.model.entity.OrderDetail;
 import com.autonetics.autonetics.api.model.request.NewOrderDetail;
+import com.autonetics.autonetics.api.model.response.OrderDetailAiDto;
 import com.autonetics.autonetics.api.model.response.OrderDetailDto;
 import org.mapstruct.*;
 
@@ -10,6 +11,9 @@ public interface OrderDetailMapper {
     OrderDetail toEntity(OrderDetailDto orderDetailDto);
 
     OrderDetailDto toDto(OrderDetail orderDetail);
+
+    @Mapping(target = "goodsID", source = "goodsID.id")
+    OrderDetailAiDto toAiDto(OrderDetail orderDetail);
 
     @Mapping(target = "orderID", ignore = true)
     @Mapping(target = "goodsID", ignore = true)
