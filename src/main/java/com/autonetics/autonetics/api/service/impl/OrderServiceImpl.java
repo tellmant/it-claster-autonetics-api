@@ -60,7 +60,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order readByClientID_Email(String email) {
+    public List<Order> readByClientID_Email(String email) {
         return orderRepository.findByClientID_Email(email)
                 .orElseThrow(
                         () -> new EntityNotFoundException("Order with client email " + email + " not found.")

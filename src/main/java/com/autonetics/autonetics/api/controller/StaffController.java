@@ -1,6 +1,7 @@
 package com.autonetics.autonetics.api.controller;
 
 import com.autonetics.autonetics.api.mapper.StaffMapper;
+import com.autonetics.autonetics.api.model.entity.Role;
 import com.autonetics.autonetics.api.model.entity.Shop;
 import com.autonetics.autonetics.api.model.entity.Staff;
 import com.autonetics.autonetics.api.model.entity.StaffType;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -80,11 +82,23 @@ public class StaffController {
     public ResponseEntity<StaffDto> create(@RequestBody NewStaffRequest newStaff) {
         Staff staff = staffMapper.toEntity(newStaff);
         staff.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
-        staff.setUpdatedOn(LocalDateTime.now());
+        staff.setUpdatedOn(Instant.now());
+        staff.setRole(Role.ROLE_STAFF);
+        staff.setPassword(passwordEncoder.encode(staff.getPassword()));
+
+        if (newStaff.staffTypeId() != null) {
+            StaffType staffType = staffTypeService.readById(newStaff.staffTypeId());
+            staff.setStaffType(staffType);
+        }
+
+        if (newStaff.shopId() != null) {
+            Shop shop = shopService.readById(newStaff.shopId());
+            staff.setShop(shop);
+        }
+
         if (staff.getShop() == null || staff.getStaffType() == null) {
             return ResponseEntity.badRequest().build();
         }
-        staff.setPassword(passwordEncoder.encode(staff.getPassword()));
 
         return ResponseEntity.ok(staffMapper.toDto(staffService.create(staff)));
     }
@@ -95,7 +109,10 @@ public class StaffController {
         staffMapper.partialUpdate(newStaff, staff);
 
         staff.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
-        staff.setUpdatedOn(LocalDateTime.now());
+        staff.setUpdatedOn(Instant.now());
+        staff.setPassword(passwordEncoder.encode(staff.getPassword()));
+        staff.setRole(Role.ROLE_STAFF);
+
         if (newStaff.staffTypeId() != null) {
             StaffType staffType = staffTypeService.readById(newStaff.staffTypeId());
             staff.setStaffType(staffType);
@@ -105,11 +122,11 @@ public class StaffController {
             Shop shop = shopService.readById(newStaff.shopId());
             staff.setShop(shop);
         }
+
         if (staff.getShop() == null || staff.getStaffType() == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        staff.setPassword(passwordEncoder.encode(staff.getPassword()));
         return ResponseEntity.ok(staffMapper.toDto(staffService.update(staff)));
     }
 
