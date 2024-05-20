@@ -18,7 +18,7 @@ public interface OrderService {
 
     Order readByBarcode(String barcode);
 
-    Order readByClientID_Email(String email);
+    List<Order> readByClientID_Email(String email);
 
     List<Order> readByNameContains(String name);
 }

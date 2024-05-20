@@ -64,9 +64,13 @@ public class OrderController {
 
     @Transactional(readOnly = true)
     @GetMapping("/client-email/{email}")
-    public ResponseEntity<OrderDto> readByClientID_Email(@PathVariable String email) {
-        Order order = orderService.readByClientID_Email(email);
-        return new ResponseEntity<>(orderMapper.toDto(order), HttpStatus.OK);
+    public ResponseEntity<List<OrderDto>> readByClientID_Email(@PathVariable String email) {
+        List<Order> order = orderService.readByClientID_Email(email);
+        List<OrderDto> orderDtoList = order.stream()
+                .map(orderMapper::toDto)
+                .toList();
+
+        return new ResponseEntity<>(orderDtoList, HttpStatus.OK);
     }
 
     @Transactional(readOnly = true)
